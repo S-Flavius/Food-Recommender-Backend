@@ -1,0 +1,18 @@
+# Cargo & Rust
+/target/
+**/*.rs.bk
+
+# Environment Variables
+.env
+.env.*
+!.env.example
+
+# IDE
+.idea/
+*.swp
+*.swo
+*.iml
+
+# OS Generated Files
+Thumbs.db
+ehtumbs.db
