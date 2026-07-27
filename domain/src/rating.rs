@@ -1,14 +1,13 @@
-
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Eq, Clone, Copy)]
 pub struct Rating(u8);
 
 impl Rating {
-    pub fn try_new(value: u8) -> Result<Self, String> {
-        if (value < 1 || value > 5) {
-            return Err(String::from("Value must be between 1 and 5"));
+    pub fn try_new(value: u8) -> Result<Self, &'static str> {
+        if !(1..=5).contains(&value) {
+            return Err("Value must be between 1 and 5");
         }
 
-        Ok(Rating(value))
+        Ok(Self(value))
     }
 
     pub fn value(&self) -> u8 {
