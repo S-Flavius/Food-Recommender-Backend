@@ -1,7 +1,7 @@
 #[derive(Debug, PartialEq, Eq, Clone, Copy)]
 pub enum Currency {
-    EUR,
-    USD,
+    Eur,
+    Usd,
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Copy)]
@@ -12,7 +12,7 @@ pub struct Price {
 
 impl Price {
     pub fn new(currency: Currency, amount: u32) -> Self {
-        Price { currency, amount }
+        Self { currency, amount }
     }
 
     pub fn amount(&self) -> u32 {
@@ -33,7 +33,7 @@ mod tests {
     fn should_create_valid_price() {
         // Arrange
         let amount = 500;
-        let currency = Currency::EUR;
+        let currency = Currency::Eur;
 
         // Act
         let result = Price::new(currency, amount);
@@ -47,7 +47,7 @@ mod tests {
     fn should_create_free_meal_price_at_zero() {
         // Arrange
         let amount = 0;
-        let currency = Currency::USD;
+        let currency = Currency::Usd;
 
         // Act
         let result = Price::new(currency, amount);
