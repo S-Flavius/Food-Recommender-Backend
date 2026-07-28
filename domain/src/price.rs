@@ -40,7 +40,7 @@ mod tests {
 
         // Assert
         assert_eq!(result.amount(), 500);
-        assert_eq!(result.currency(), Currency::EUR);
+        assert_eq!(result.currency(), Currency::Eur);
     }
 
     #[test]
@@ -54,6 +54,6 @@ mod tests {
 
         // Assert
         assert_eq!(result.amount(), 0);
-        assert_eq!(result.currency(), Currency::USD);
+        assert_eq!(result.currency(), Currency::Usd);
     }
 }
