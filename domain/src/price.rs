@@ -1,6 +1,6 @@
 /// Represents a currency used in a `Price`.
 ///
-/// This enum lists the currencies currently supported by the application.
+/// This enum lists the currencies currently supported in the application.
 #[derive(Debug, PartialEq, Eq, Clone, Copy)]
 pub enum Currency {
     Eur,
@@ -9,8 +9,10 @@ pub enum Currency {
 
 /// Represents a monetary value combining an amount and a specific currency.
 ///
-/// This value object prevents invalid states such as negative money and
-/// ensures that cross-currency operations are handled explicitly.
+/// `amount` is stored as a `u32` (it cannot be negative) and it
+/// represents the smallest unit of the `Currency` (Cents for Eur) to
+/// dismiss floating point errors.
+/// `currency` is a value of the `Currency` enum.
 #[derive(Debug, PartialEq, Eq, Clone, Copy)]
 pub struct Price {
     currency: Currency,
@@ -26,7 +28,8 @@ impl Price {
     /// ```
     /// use domain::price::{Price, Currency};
     ///
-    /// let coffee_price = Price::new(Currency::Eur, 350); // 3.50 EUR
+    /// let coffee_price = Price::new(Currency::Eur, 350);
+    /// // In this case the price of the coffee is 3.50 Euros
     /// assert_eq!(coffee_price.amount(), 350);
     /// ```
     pub fn new(currency: Currency, amount: u32) -> Self {
