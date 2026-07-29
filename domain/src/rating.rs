@@ -4,9 +4,7 @@
 #[derive(Debug, PartialEq, Eq, Clone, Copy)]
 pub struct Rating(u8);
 
-/// The minimum rating is currently set to 1.
 const MIN_RATING: u8 = 1;
-/// The maximum rating is currently set to 5.
 const MAX_RATING: u8 = 5;
 
 impl Rating {
