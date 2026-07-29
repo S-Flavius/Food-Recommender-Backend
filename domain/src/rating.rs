@@ -1,10 +1,29 @@
+/// Represents a numerical value used for food rating.
+///
+/// This value object is used for rating food respecting MIN and MAX boundaries.
 #[derive(Debug, PartialEq, Eq, Clone, Copy)]
 pub struct Rating(u8);
 
+/// The minimum rating is currently set to 1.
 const MIN_RATING: u8 = 1;
+/// The maximum rating is currently set to 5.
 const MAX_RATING: u8 = 5;
 
 impl Rating {
+    /// Creates a new `Rating`.
+    ///
+    /// # Examples
+    /// Creating a Rating for a coffee.
+    ///
+    /// ```
+    /// use domain::rating::{Rating};
+    ///
+    /// let coffee_rating = Rating::try_new(3).unwrap(); // A 3 star rating
+    /// assert_eq!(coffee_rating.value(), 3);
+    ///
+    /// ```
+    ///
+    /// A rating cannot be less than 1 or greater than 5.
     pub fn try_new(value: u8) -> Result<Self, &'static str> {
         if !(MIN_RATING..=MAX_RATING).contains(&value) {
             return Err("Value must be between 1 and 5");
@@ -13,6 +32,7 @@ impl Rating {
         Ok(Self(value))
     }
 
+    /// Returns the value of the `Rating` object.
     pub fn value(&self) -> u8 {
         self.0
     }
@@ -21,7 +41,6 @@ impl Rating {
 #[cfg(test)]
 mod tests {
 
-    // Import everything from parent module
     use super::*;
 
     #[test]
