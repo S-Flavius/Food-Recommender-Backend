@@ -1,9 +1,12 @@
 #[derive(Debug, PartialEq, Eq, Clone, Copy)]
 pub struct Rating(u8);
 
+const MIN_RATING: u8 = 1;
+const MAX_RATING: u8 = 5;
+
 impl Rating {
     pub fn try_new(value: u8) -> Result<Self, &'static str> {
-        if !(1..=5).contains(&value) {
+        if !(MIN_RATING..=MAX_RATING).contains(&value) {
             return Err("Value must be between 1 and 5");
         }
 
