@@ -21,7 +21,9 @@ impl Rating {
     /// ```
     pub fn try_new(value: u8) -> Result<Self, String> {
         if !(MIN_RATING..=MAX_RATING).contains(&value) {
-            return Err(format!("Value must be between {MIN_RATING} and {MAX_RATING}"));
+            return Err(format!(
+                "Value must be between {MIN_RATING} and {MAX_RATING}"
+            ));
         }
 
         Ok(Self(value))
