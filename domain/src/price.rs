@@ -1,7 +1,6 @@
-/// Represents the name of the `Currency` used in a `Price` object.
+/// Represents a currency used in a `Price`.
 ///
-/// This enum stores values for available currencies used in the
-/// app.
+/// This enum lists the currencies currently supported by the application.
 #[derive(Debug, PartialEq, Eq, Clone, Copy)]
 pub enum Currency {
     Eur,
