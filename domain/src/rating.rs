@@ -25,37 +25,37 @@ mod tests {
     use super::*;
 
     #[test]
-    fn should_create_rating_of_1() {
+    fn should_create_rating_of_min_rating() {
         // Arrange
-        let valid_rating = 1;
+        let min_rating = MIN_RATING;
 
         // Act
-        let result = Rating::try_new(valid_rating);
+        let result = Rating::try_new(min_rating);
 
         // Assert
         assert!(result.is_ok());
         let rating = result.unwrap();
-        assert_eq!(rating.value(), 1);
+        assert_eq!(rating.value(), MIN_RATING);
     }
 
     #[test]
-    fn should_create_rating_of_5() {
+    fn should_create_rating_of_max_rating() {
         // Arrange
-        let valid_rating = 5;
+        let max_rating = MAX_RATING;
 
         // Act
-        let result = Rating::try_new(valid_rating);
+        let result = Rating::try_new(max_rating);
 
         // Assert
         assert!(result.is_ok());
         let rating = result.unwrap();
-        assert_eq!(rating.value(), 5);
+        assert_eq!(rating.value(), MAX_RATING);
     }
 
     #[test]
-    fn should_fail_when_rating_is_greater_than_5() {
+    fn should_fail_when_rating_is_greater_than_max_rating() {
         // Arrange
-        let rating = 6;
+        let rating = MAX_RATING + 1;
 
         // Act
         let result = Rating::try_new(rating);
@@ -65,9 +65,9 @@ mod tests {
     }
 
     #[test]
-    fn should_fail_when_rating_is_less_than_1() {
+    fn should_fail_when_rating_is_less_than_min_rating() {
         // Arrange
-        let rating = 0;
+        let rating = MIN_RATING - 1;
 
         // Act
         let result = Rating::try_new(rating);
