@@ -1,22 +1,17 @@
-/// Represents a currency used in a `Price`.
-///
-/// This enum lists the currencies currently supported in the application.
-#[derive(Debug, PartialEq, Eq, Clone, Copy)]
-pub enum Currency {
-    Eur,
-    Usd,
-}
+use rust_decimal::Decimal;
+use rusty_money::iso::Currency;
+use rusty_money::{FormattableCurrency, Money, iso};
 
 /// Represents a monetary value combining an amount and a specific currency.
 ///
-/// `amount` is stored as a `u32` (it cannot be negative) and it
-/// represents the smallest unit of the `Currency` (Cents for Eur) to
-/// dismiss floating point errors.
-/// `currency` is a value of the `Currency` enum.
-#[derive(Debug, PartialEq, Eq, Clone, Copy)]
+/// The `Price` is represented by wrapping the `Money` struct from rusty_money.
+/// The amount of the price is represented by a decimal value using `Decimal`
+/// struct from rust_decimal.
+/// The currency of the price is represented by the struct `Currency` in the
+/// iso module of rusty_money.
+#[derive(Debug, PartialEq, Eq)]
 pub struct Price {
-    currency: Currency,
-    amount: u32,
+    inner: Money<'static, Currency>,
 }
 
 impl Price {
@@ -26,56 +21,88 @@ impl Price {
     /// Creating a `Price` for a coffee.
     ///
     /// ```
-    /// use domain::price::{Price, Currency};
+    /// use rust_decimal::Decimal;
+    /// use domain::price::{Price};
+    /// use std::str::FromStr;
     ///
-    /// let coffee_price = Price::new(Currency::Eur, 350);
+    /// let currency = "eUr";
+    /// let amount = Decimal::from_str("3.50").unwrap();
+    ///
+    /// let coffee_price = Price::new(currency, amount);
     /// // In this case the price of the coffee is 3.50 Euros
-    /// assert_eq!(coffee_price.amount(), 350);
+    /// assert!(coffee_price.is_ok());
     /// ```
-    pub fn new(currency: Currency, amount: u32) -> Self {
-        Self { currency, amount }
+    pub fn new(currency: &str, amount: Decimal) -> Result<Self, &'static str> {
+        let upper_currency = currency.to_uppercase();
+        let currency_option = iso::find(&upper_currency);
+
+        match currency_option {
+            Some(valid_currency) => {
+                let money = Money::from_decimal(amount, valid_currency);
+
+                Ok(Self { inner: money })
+            }
+
+            None => Err("Currency not found"),
+        }
     }
 
     /// Returns the `amount` of the `Price` object.
-    pub fn amount(&self) -> u32 {
-        self.amount
+    pub fn amount(&self) -> &Decimal {
+        self.inner.amount()
     }
 
     /// Returns the `Currency` of the `Price` object.
-    pub fn currency(&self) -> Currency {
-        self.currency
+    pub fn currency(&self) -> &str {
+        self.inner.currency().code()
     }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::str::FromStr;
 
     #[test]
     fn should_create_valid_price() {
         // Arrange
-        let currency = Currency::Eur;
-        let amount = 500;
+        let currency = "Eur";
+        let amount = Decimal::from_str("1.23").unwrap();
 
         // Act
         let result = Price::new(currency, amount);
 
         // Assert
-        assert_eq!(result.amount(), 500);
-        assert_eq!(result.currency(), Currency::Eur);
+        assert!(result.is_ok());
+        let price = result.unwrap();
+        assert_eq!(price.amount(), &amount);
+        assert_eq!(price.currency(), "EUR");
     }
 
     #[test]
     fn should_create_free_meal_price_at_zero() {
         // Arrange
-        let currency = Currency::Usd;
-        let amount = 0;
+        let currency = "usd";
+        let amount = Decimal::from_str("0").unwrap();
 
         // Act
         let result = Price::new(currency, amount);
 
         // Assert
-        assert_eq!(result.amount(), 0);
-        assert_eq!(result.currency(), Currency::Usd);
+        assert!(result.is_ok());
+        let price = result.unwrap();
+        assert_eq!(price.amount(), &amount);
+        assert_eq!(price.currency(), "USD");
+    }
+
+    #[test]
+    fn should_fail_on_invalid_currency() {
+        // Arrange
+        let currency = "FaKe";
+        let amount = Decimal::from_str("200.00").unwrap();
+
+        // Act
+        let result = Price::new(currency, amount);
+        assert!(result.is_err());
     }
 }
