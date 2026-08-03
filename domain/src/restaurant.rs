@@ -2,7 +2,7 @@ use uuid::Uuid;
 
 /// Represents the restaurant entity.
 ///
-/// A restaurant has an Uuid `id`, a `name` and a `location`.
+/// A restaurant has a `Uuid` `id`, a `name`, and a `location`.
 /// It is a data container and does not contain any deep logic.
 #[derive(Debug, PartialEq, Eq, Clone)]
 pub struct Restaurant {
