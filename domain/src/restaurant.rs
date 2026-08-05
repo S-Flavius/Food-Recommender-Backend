@@ -28,10 +28,16 @@ impl Restaurant {
     ///
     /// assert!(restaurant.is_ok());
     /// ```
-    pub fn try_new(id: Uuid, name: String, location: String) -> Result<Self, &'static str> {
-        if name.trim().is_empty() || location.trim().is_empty() {
-            return Err("Name or location cannot be empty");
-        }
+pub fn try_new(id: Uuid, name: String, location: String) -> Result<Self, &'static str> {
+    if name.trim().is_empty() {
+        return Err("Name cannot be empty");
+    }
+    if location.trim().is_empty() {
+        return Err("Location cannot be empty");
+    }
+
+    Ok(Self { id, name, location })
+}
 
         Ok(Self { id, name, location })
     }
