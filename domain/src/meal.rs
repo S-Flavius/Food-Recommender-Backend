@@ -114,7 +114,7 @@ impl Meal {
 }
 
 #[cfg(test)]
-mod test {
+mod tests {
     use super::*;
     use crate::price::Price;
     use crate::rating::Rating;
