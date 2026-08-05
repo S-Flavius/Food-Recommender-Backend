@@ -12,7 +12,7 @@ pub struct Restaurant {
 }
 
 impl Restaurant {
-    /// Creates a new `Restaurant`c.
+    /// Creates a new `Restaurant`.
     ///
     /// # Examples
     ///
