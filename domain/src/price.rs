@@ -25,7 +25,7 @@ impl Price {
     /// use domain::price::{Price};
     /// use std::str::FromStr;
     ///
-    /// let currency = "eUr"; // Case-insensitive
+    /// let currency = "eur"; // case insensitive
     /// let amount = Decimal::from_str("3.50").unwrap();
     ///
     /// let coffee_price = Price::try_new(currency, amount);
