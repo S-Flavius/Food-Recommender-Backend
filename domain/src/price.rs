@@ -25,14 +25,14 @@ impl Price {
     /// use domain::price::{Price};
     /// use std::str::FromStr;
     ///
-    /// let currency = "eUr";
+    /// let currency = "eUr"; // Case-insensitive
     /// let amount = Decimal::from_str("3.50").unwrap();
     ///
-    /// let coffee_price = Price::new(currency, amount);
+    /// let coffee_price = Price::try_new(currency, amount);
     /// // In this case the price of the coffee is 3.50 Euros
     /// assert!(coffee_price.is_ok());
     /// ```
-    pub fn new(currency: &str, amount: Decimal) -> Result<Self, &'static str> {
+    pub fn try_new(currency: &str, amount: Decimal) -> Result<Self, &'static str> {
         let upper_currency = currency.to_uppercase();
         let currency_option = iso::find(&upper_currency);
 
@@ -70,7 +70,7 @@ mod tests {
         let amount = Decimal::from_str("1.23").unwrap();
 
         // Act
-        let result = Price::new(currency, amount);
+        let result = Price::try_new(currency, amount);
 
         // Assert
         assert!(result.is_ok());
@@ -86,7 +86,7 @@ mod tests {
         let amount = Decimal::from_str("0").unwrap();
 
         // Act
-        let result = Price::new(currency, amount);
+        let result = Price::try_new(currency, amount);
 
         // Assert
         assert!(result.is_ok());
@@ -102,7 +102,7 @@ mod tests {
         let amount = Decimal::from_str("200.00").unwrap();
 
         // Act
-        let result = Price::new(currency, amount);
+        let result = Price::try_new(currency, amount);
         assert!(result.is_err());
     }
 }
