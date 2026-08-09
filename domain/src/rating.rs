@@ -3,7 +3,6 @@
 pub struct Rating(u8);
 
 const MIN_RATING: u8 = 1;
-
 const MAX_RATING: u8 = 5;
 
 impl Rating {
