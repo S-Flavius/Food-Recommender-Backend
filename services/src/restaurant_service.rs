@@ -30,8 +30,8 @@ use uuid::Uuid;
 /// }
 ///
 /// impl RestaurantRepository for MockRepo {
-///     fn save(&self, restaurant: Restaurant) -> Result<(), String> {
-///         self.saved.borrow_mut().push(restaurant);
+///     fn save(&self, restaurant: &Restaurant) -> Result<(), String> {
+///         self.saved.borrow_mut().push(restaurant.clone());
 ///         Ok(())
 ///     }
 /// }
@@ -47,12 +47,12 @@ pub trait RestaurantRepository {
     /// Persist the provided `restaurant`.
     ///
     /// Implementations should map any storage-specific failure into a `String` error.
-    fn save(&self, restaurant: Restaurant) -> Result<(), String>;
+    fn save(&self, restaurant: &Restaurant) -> Result<(), String>;
 }
 
 /// Service layer for restaurant-related use cases.
 ///
-/// The `RestaurantService` coordinates creation and persistence of `Restaurant`
+/// The `RestaurantService` coordinates the creation and persistence of `Restaurant`
 /// entities. It receives a `RestaurantRepository` implementation via dependency
 /// injection which allows swapping storage strategies in tests and production.
 ///
@@ -72,8 +72,8 @@ pub trait RestaurantRepository {
 /// struct MockRepo { saved: Rc<RefCell<Vec<Restaurant>>> }
 /// impl MockRepo { fn new() -> Self { Self { saved: Rc::new(RefCell::new(Vec::new())) } } }
 /// impl RestaurantRepository for MockRepo {
-///     fn save(&self, restaurant: Restaurant) -> Result<(), String> {
-///         self.saved.borrow_mut().push(restaurant);
+///     fn save(&self, restaurant: &Restaurant) -> Result<(), String> {
+///         self.saved.borrow_mut().push(restaurant.clone());
 ///         Ok(())
 ///     }
 /// }
@@ -118,8 +118,8 @@ impl<R: RestaurantRepository> RestaurantService<R> {
     /// struct MockRepo { saved: Rc<RefCell<Vec<Restaurant>>> }
     /// impl MockRepo { fn new() -> Self { Self { saved: Rc::new(RefCell::new(Vec::new())) } } }
     /// impl RestaurantRepository for MockRepo {
-    ///     fn save(&self, restaurant: Restaurant) -> Result<(), String> {
-    ///         self.saved.borrow_mut().push(restaurant);
+    ///     fn save(&self, restaurant: &Restaurant) -> Result<(), String> {
+    ///         self.saved.borrow_mut().push(restaurant.clone());
     ///         Ok(())
     ///     }
     /// }
@@ -135,7 +135,7 @@ impl<R: RestaurantRepository> RestaurantService<R> {
         let restaurant = Restaurant::try_new(Uuid::new_v4(), name, location)
             .map_err(|error| error.to_string())?;
 
-        self.repository.save(restaurant.clone())?;
+        self.repository.save(&restaurant)?;
         Ok(restaurant)
     }
 }
@@ -152,8 +152,8 @@ mod tests {
     }
 
     impl RestaurantRepository for MockRestaurantRepo {
-        fn save(&self, restaurant: Restaurant) -> Result<(), String> {
-            self.saved.borrow_mut().push(restaurant);
+        fn save(&self, restaurant: &Restaurant) -> Result<(), String> {
+            self.saved.borrow_mut().push(restaurant.clone());
             Ok(())
         }
     }
@@ -173,5 +173,16 @@ mod tests {
         assert_eq!(saved_restaurants[0], created);
         assert_eq!(saved_restaurants[0].name(), "Noma");
         assert_eq!(saved_restaurants[0].location(), "Copenhagen");
+    }
+
+    #[test]
+    fn create_restaurant_fails_on_invalid_input() {
+        let repo = MockRestaurantRepo::default();
+        let service = RestaurantService::new(repo);
+
+        // Pass an empty name, which the Domain should reject
+        let result = service.create_restaurant(" ".to_string(), "Copenhagen".to_string());
+
+        assert!(result.is_err());
     }
 }

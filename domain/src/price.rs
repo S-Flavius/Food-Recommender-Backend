@@ -5,7 +5,7 @@ use rusty_money::{FormattableCurrency, Money, iso};
 /// Represents a monetary value combining an amount and a specific currency.
 ///
 /// The `Price` is represented by wrapping the `Money` struct from rusty_money.
-/// The amount of the price is represented by a decimal value using the ` Decimal `
+/// The amount of the price is represented by a decimal value using the `Decimal`
 /// struct from rust_decimal.
 /// The currency of the price is represented by the struct `Currency` in the
 /// iso module of rusty_money.
