@@ -5,7 +5,7 @@ use rusty_money::{FormattableCurrency, Money, iso};
 /// Represents a monetary value combining an amount and a specific currency.
 ///
 /// The `Price` is represented by wrapping the `Money` struct from rusty_money.
-/// The amount of the price is represented by a decimal value using `Decimal`
+/// The amount of the price is represented by a decimal value using the ` Decimal `
 /// struct from rust_decimal.
 /// The currency of the price is represented by the struct `Currency` in the
 /// iso module of rusty_money.
@@ -25,7 +25,7 @@ impl Price {
     /// use domain::price::{Price};
     /// use std::str::FromStr;
     ///
-    /// let currency = "eur"; // case insensitive
+    /// let currency = "eur"; // case-insensitive
     /// let amount = Decimal::from_str("3.50").unwrap();
     ///
     /// let coffee_price = Price::try_new(currency, amount);
@@ -98,7 +98,7 @@ mod tests {
     #[test]
     fn should_fail_on_invalid_currency() {
         // Arrange
-        let currency = "FaKe";
+        let currency = "Fake";
         let amount = Decimal::from_str("200.00").unwrap();
 
         // Act
