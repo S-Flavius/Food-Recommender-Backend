@@ -14,7 +14,7 @@ impl Rating {
     /// ```
     /// use domain::rating::{Rating};
     ///
-    /// let coffee_rating = Rating::try_new(3).unwrap(); // A 3 star rating
+    /// let coffee_rating = Rating::try_new(3).unwrap(); // A 3-star rating
     /// assert_eq!(coffee_rating.value(), 3);
     ///
     /// ```

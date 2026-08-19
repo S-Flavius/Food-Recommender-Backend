@@ -1,5 +1,5 @@
-use crate::price::Price;
-use crate::rating::Rating;
+use crate::Price;
+use crate::Rating;
 use chrono::NaiveDate;
 use uuid::Uuid;
 
