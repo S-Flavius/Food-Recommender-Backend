@@ -493,10 +493,11 @@ checksum = "cf54715a573b99ac80df0bc206da022bcd442c974952c7b9720069370852e21f"
 
 [[package]]
 name = "rusty-money"
-version = "0.5.0"
+version = "0.5.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e8ac0a3274868e5d2615e749ad3b944d93cf846deefd46ea918a225e5d53856d"
+checksum = "e9826983e8a9a2f301a3810bb98618948ae7e7f2ba073eaaa16ab19104b33f2c"
 dependencies = [
+ "arrayvec",
  "rust_decimal",
 ]
 
